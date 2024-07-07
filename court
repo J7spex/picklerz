@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draggable Boxes on Pickleball Court</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="court">
+      <!-- Pickleball court background -->
+      <img src="pickleball_court.jpg" alt="Pickleball Court">
+      
+      <!-- Draggable boxes -->
+      <div id="box1" class="box"></div>
+      <div id="box2" class="box"></div>
+      <div id="box3" class="box"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  position: relative;
+}
+
+#court {
+  position: relative;
+}
+
+#court img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.box {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 0, 0, 0.5);
+  border: 2px solid #fff;
+  cursor: move;
+}
+
+#box1 { top: 50px; left: 100px; }
+#box2 { top: 150px; left: 300px; }
+#box3 { top: 250px; left: 500px; }
+// Get all box elements
+const boxes = document.querySelectorAll('.box');
+
+// Track active drag item
+let activeItem = null;
+
+// Attach event listeners
+boxes.forEach(box => {
+  box.addEventListener('mousedown', startDrag);
+});
+
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('mousemove', drag);
+
+function startDrag(e) {
+  activeItem = e.target;
+  activeItem.style.zIndex = 1000; // Bring the active box to the front
+  activeItem.style.opacity = 0.5; // Reduce opacity while dragging
+}
+
+function endDrag() {
+  if (activeItem) {
+    activeItem.style.opacity = 1; // Restore opacity
+    activeItem = null;
+  }
+}
+
+function drag(e) {
+  if (activeItem) {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    // Adjust box position based on mouse movement
+    activeItem.style.left = `${mouseX - activeItem.offsetWidth / 2}px`;
+    activeItem.style.top = `${mouseY - activeItem.offsetHeight / 2}px`;
+  }
+}
